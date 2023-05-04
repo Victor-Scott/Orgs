@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_list_products_icon"
+        android:icon="@drawable/ic_action_order"
+        android:title="Ordenar"
+        app:showAsAction="ifRoom">
+        <menu>
+
+            <item android:title="Nome">
+                <menu>
+                    <item
+                        android:id="@+id/menu_list_products_name_asc"
+                        android:title="Nome Asc" />
+
+                    <item
+                        android:id="@+id/menu_list_products_name_desc"
+                        android:title="Nome Desc" />
+                </menu>
+            </item>
+
+
+            <item android:title="Descrição">
+                <menu>
+                    <item
+                        android:id="@+id/menu_list_products_desc_asc"
+                        android:title="Descrição Asc" />
+
+                    <item
+                        android:id="@+id/menu_list_products_desc_desc"
+                        android:title="Descrição Desc" />
+                </menu>
+            </item>
+
+
+            <item android:title="Valor">
+                <menu>
+                    <item
+                        android:id="@+id/menu_list_products_value_asc"
+                        android:title="Valor Asc" />
+
+                    <item
+                        android:id="@+id/menu_list_products_value_desc"
+                        android:title="Valor Desc" />
+                </menu>
+            </item>
+
+
+            <item
+                android:id="@+id/menu_list_products_no_order"
+                android:title="Sem Ordem" />
+
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_list_products_logout"
+        android:icon="@drawable/ic_action_logout"
+        android:title="Logout"
+        app:showAsAction="ifRoom" />
+
+</menu>
