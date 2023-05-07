@@ -3,11 +3,11 @@ package br.com.alura.orgs.ui.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import br.com.alura.orgs.database.AppDatabase
 import br.com.alura.orgs.databinding.ActivityUserRegistrationFormBinding
 import br.com.alura.orgs.extensions.toHash
+import br.com.alura.orgs.extensions.toast
 import br.com.alura.orgs.model.User
 import kotlinx.coroutines.launch
 
@@ -30,17 +30,18 @@ class UserRegistrationFormActivity : AppCompatActivity() {
         binding.activityFormRegistrationButtonRegister.setOnClickListener {
             val newUser = createUser()
             Log.i("RegistrationUser", "onCreate: $newUser")
-            lifecycleScope.launch {
-                try {
-                    userDao.save(newUser)
-                    finish()
-                } catch (e: Exception) {
-                    Toast.makeText(
-                        this@UserRegistrationFormActivity,
-                        "Erro ao cadastrar",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            saveUser(newUser)
+        }
+    }
+
+    private fun saveUser(user: User) {
+        lifecycleScope.launch {
+            try {
+                userDao.save(user)
+                finish()
+            } catch (e: Exception) {
+                Log.e("RegistrationForm", "saveUser: $e")
+                toast("Erro ao cadastrar")
             }
         }
     }

@@ -10,6 +10,7 @@ import br.com.alura.orgs.database.AppDatabase
 import br.com.alura.orgs.databinding.ActivityLoginBinding
 import br.com.alura.orgs.extensions.goTo
 import br.com.alura.orgs.extensions.toHash
+import br.com.alura.orgs.extensions.toast
 import br.com.alura.orgs.preferences.dataStore
 import br.com.alura.orgs.preferences.userLoggedPreferences
 import kotlinx.coroutines.Dispatchers
@@ -36,21 +37,19 @@ class LoginActivity : AppCompatActivity() {
         binding.activityLoginButtonEnter.setOnClickListener {
             val user = binding.activityLoginUser.text.toString()
             val password = binding.activityLoginPassword.text.toString().toHash()
-            Log.i("LoginActivity", "onCreate: $user - $password")
+            authenticateUser(user, password)
+        }
+    }
 
-            lifecycleScope.launch {
-                userDao.authenticate(user, password)?.let {
-                    dataStore.edit { preferences ->
-                        preferences[userLoggedPreferences] = it.uid
-                    }
-                    goTo(ListProductsActivity::class.java)
-                    finish()
-                } ?: Toast.makeText(
-                    this@LoginActivity,
-                    "Falha na autenticação",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+    private fun authenticateUser(user: String, password: String) {
+        lifecycleScope.launch {
+            userDao.authenticate(user, password)?.let {
+                dataStore.edit { preferences ->
+                    preferences[userLoggedPreferences] = it.uid
+                }
+                goTo(ListProductsActivity::class.java)
+                finish()
+            } ?: toast("Falha na autenticação")
         }
     }
 

@@ -31,6 +31,7 @@ class DetailsProductActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        title = "Detalhes do produto"
         loadProduct()
     }
 

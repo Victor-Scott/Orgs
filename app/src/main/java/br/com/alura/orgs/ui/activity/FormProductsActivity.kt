@@ -1,6 +1,7 @@
 package br.com.alura.orgs.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import br.com.alura.orgs.database.AppDatabase
@@ -8,10 +9,12 @@ import br.com.alura.orgs.databinding.ActivityFormProductsBinding
 import br.com.alura.orgs.extensions.loadImage
 import br.com.alura.orgs.model.Product
 import br.com.alura.orgs.ui.dialog.FormImageDialog
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class FormProductsActivity : AppCompatActivity() {
+class FormProductsActivity : UserBaseActivity() {
 
     private val binding by lazy {
         ActivityFormProductsBinding.inflate(layoutInflater)
@@ -41,6 +44,7 @@ class FormProductsActivity : AppCompatActivity() {
         }
 
         loadProduct()
+
     }
 
     private fun loadProduct() {
@@ -71,14 +75,17 @@ class FormProductsActivity : AppCompatActivity() {
         val saveButton = binding.activityFormProductsSaveButton
         saveButton.setOnClickListener {
             lifecycleScope.launch {
-                val newProduct = createProduct()
-                productDao.save(newProduct)
-                finish()
+                user.value?.let {user ->
+                    val newProduct = createProduct(user.uid)
+                    productDao.save(newProduct)
+                    finish()
+                }
             }
+
         }
     }
 
-    private fun createProduct(): Product {
+    private fun createProduct(userId: String): Product {
         val nameSpace = binding.activityFormProductsTietName
         val name = nameSpace.text.toString()
         val descSpace = binding.activityFormProductsTietDesc
@@ -91,7 +98,8 @@ class FormProductsActivity : AppCompatActivity() {
             name = name,
             desc = desc,
             value = value,
-            image = url
+            image = url,
+            userId = userId
         )
         return newProduct
     }

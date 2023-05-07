@@ -1,28 +1,21 @@
 package br.com.alura.orgs.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
 import br.com.alura.orgs.R
 import br.com.alura.orgs.database.AppDatabase
 import br.com.alura.orgs.databinding.ActivityListProductsBinding
 import br.com.alura.orgs.extensions.goTo
 import br.com.alura.orgs.model.Product
-import br.com.alura.orgs.preferences.dataStore
-import br.com.alura.orgs.preferences.userLoggedPreferences
 import br.com.alura.orgs.ui.recyclerView.adapter.ListProductsAdapter
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
-class ListProductsActivity : AppCompatActivity() {
+class ListProductsActivity : UserBaseActivity() {
 
     private val binding by lazy {
         ActivityListProductsBinding.inflate(layoutInflater)
@@ -30,10 +23,6 @@ class ListProductsActivity : AppCompatActivity() {
 
     private val productDao by lazy {
         AppDatabase.instance(this).productDao()
-    }
-
-    private val userDao by lazy {
-        AppDatabase.instance(this).userDao()
     }
 
     private var product: Product? = null
@@ -46,30 +35,14 @@ class ListProductsActivity : AppCompatActivity() {
         title = "Orgs"
         configRecyclerView()
         configFab()
+
         lifecycleScope.launch {
             launch {
-                productDao.searchAll().collect {
-                    adapter.update(it)
-                }
-            }
-
-            launch {
-                dataStore.data.collect { preferences ->
-                    preferences[userLoggedPreferences]?.let {
-                        launch {
-                            userDao.searchForId(it).collect {
-                                Log.i("ListProducts", "onCreate: $it")
-                            }
-                        }
-                    } ?: goToLogin()
+                user.filterNotNull().collect { user ->
+                    searchProductUser(user.uid)
                 }
             }
         }
-    }
-
-    private fun goToLogin() {
-        goTo(LoginActivity::class.java)
-        finish()
     }
 
 
@@ -80,47 +53,18 @@ class ListProductsActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         lifecycleScope.launch {
-            createOptionsMenuOrder(item)
+            user.value?.let {
+                createOptionsMenuOrder(item, it.uid)
+            }
         }
 
         return true
     }
 
-    private suspend fun createOptionsMenuOrder(item: MenuItem): Boolean {
-        val productsOrdered: List<Product>? = when (item.itemId) {
-            R.id.menu_list_products_name_asc ->
-                productDao.searchAllOrderByNameAsc()
-            R.id.menu_list_products_name_desc ->
-                productDao.searchAllOrderByNameDesc()
-            R.id.menu_list_products_desc_asc ->
-                productDao.searchAllOrderByDescAsc()
-            R.id.menu_list_products_desc_desc ->
-                productDao.searchAllOrderByDescDesc()
-            R.id.menu_list_products_value_asc ->
-                productDao.searchAllOrderByValueAsc()
-            R.id.menu_list_products_value_desc ->
-                productDao.searchAllOrderByValueDesc()
-            else -> null
-        }
-
-        when (item.itemId) {
-            R.id.menu_list_products_no_order ->
-                productDao.searchAll().collect {
-                    adapter.update(it)
-                }
-            R.id.menu_list_products_logout ->
-                lifecycleScope.launch {
-                    dataStore.edit { preferences ->
-                        preferences.remove(userLoggedPreferences)
-                    }
-                }
-
-        }
-
-        productsOrdered?.let {
+    private suspend fun searchProductUser(userId: String) {
+        productDao.searchAllUserProducts(userId).collect {
             adapter.update(it)
         }
-        return true
     }
 
     private fun configFab() {
@@ -160,4 +104,38 @@ class ListProductsActivity : AppCompatActivity() {
             Log.i("ListProducts", "configRecyclerView: Remover $it")
         }
     }
+
+    private suspend fun createOptionsMenuOrder(item: MenuItem, userId: String): Boolean {
+        val productsOrdered: List<Product>? = when (item.itemId) {
+            R.id.menu_list_products_name_asc ->
+                productDao.searchAllOrderByNameAsc()
+            R.id.menu_list_products_name_desc ->
+                productDao.searchAllOrderByNameDesc()
+            R.id.menu_list_products_desc_asc ->
+                productDao.searchAllOrderByDescAsc()
+            R.id.menu_list_products_desc_desc ->
+                productDao.searchAllOrderByDescDesc()
+            R.id.menu_list_products_value_asc ->
+                productDao.searchAllOrderByValueAsc()
+            R.id.menu_list_products_value_desc ->
+                productDao.searchAllOrderByValueDesc()
+            else -> null
+        }
+
+        when (item.itemId) {
+            R.id.menu_list_products_no_order ->
+                productDao.searchAllUserProducts(userId).collect {
+                    adapter.update(it)
+                }
+            R.id.menu_list_products_profile ->
+                goTo(UserProfileActivity::class.java)
+        }
+
+        productsOrdered?.let {
+            adapter.update(it)
+        }
+        return true
+    }
+
+
 }

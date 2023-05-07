@@ -55,9 +55,9 @@
     </item>
 
     <item
-        android:id="@+id/menu_list_products_logout"
-        android:icon="@drawable/ic_action_logout"
-        android:title="Logout"
+        android:id="@+id/menu_list_products_profile"
+        android:icon="@drawable/ic_action_person"
+        android:title="Perfil"
         app:showAsAction="ifRoom" />
 
 </menu>
