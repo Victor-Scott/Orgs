@@ -108,17 +108,17 @@ class ListProductsActivity : UserBaseActivity() {
     private suspend fun createOptionsMenuOrder(item: MenuItem, userId: String): Boolean {
         val productsOrdered: List<Product>? = when (item.itemId) {
             R.id.menu_list_products_name_asc ->
-                productDao.searchAllOrderByNameAsc()
+                productDao.searchAllOrderByNameAsc(userId)
             R.id.menu_list_products_name_desc ->
-                productDao.searchAllOrderByNameDesc()
+                productDao.searchAllOrderByNameDesc(userId)
             R.id.menu_list_products_desc_asc ->
-                productDao.searchAllOrderByDescAsc()
+                productDao.searchAllOrderByDescAsc(userId)
             R.id.menu_list_products_desc_desc ->
-                productDao.searchAllOrderByDescDesc()
+                productDao.searchAllOrderByDescDesc(userId)
             R.id.menu_list_products_value_asc ->
-                productDao.searchAllOrderByValueAsc()
+                productDao.searchAllOrderByValueAsc(userId)
             R.id.menu_list_products_value_desc ->
-                productDao.searchAllOrderByValueDesc()
+                productDao.searchAllOrderByValueDesc(userId)
             else -> null
         }
 

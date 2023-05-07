@@ -12,11 +12,11 @@
                 <menu>
                     <item
                         android:id="@+id/menu_list_products_name_asc"
-                        android:title="Nome Asc" />
+                        android:title="Nome ↑" />
 
                     <item
                         android:id="@+id/menu_list_products_name_desc"
-                        android:title="Nome Desc" />
+                        android:title="Nome ↓" />
                 </menu>
             </item>
 
@@ -25,11 +25,11 @@
                 <menu>
                     <item
                         android:id="@+id/menu_list_products_desc_asc"
-                        android:title="Descrição Asc" />
+                        android:title="Descrição ↑" />
 
                     <item
                         android:id="@+id/menu_list_products_desc_desc"
-                        android:title="Descrição Desc" />
+                        android:title="Descrição ↓" />
                 </menu>
             </item>
 
@@ -38,11 +38,11 @@
                 <menu>
                     <item
                         android:id="@+id/menu_list_products_value_asc"
-                        android:title="Valor Asc" />
+                        android:title="Valor ↑" />
 
                     <item
                         android:id="@+id/menu_list_products_value_desc"
-                        android:title="Valor Desc" />
+                        android:title="Valor ↓" />
                 </menu>
             </item>
 

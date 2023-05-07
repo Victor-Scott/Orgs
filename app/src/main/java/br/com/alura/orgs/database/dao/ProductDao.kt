@@ -26,21 +26,21 @@ interface ProductDao {
     @Query("SELECT * FROM Product WHERE uid = :id")
     suspend fun searchForId(id: Long) : Product?
 
-    @Query("SELECT * FROM Product ORDER BY name ASC")
-    suspend fun searchAllOrderByNameAsc() : List<Product>
+    @Query("SELECT * FROM Product WHERE userId = :userId ORDER BY name ASC")
+    suspend fun searchAllOrderByNameAsc(userId: String) : List<Product>
 
-    @Query("SELECT * FROM Product ORDER BY name DESC")
-    suspend fun searchAllOrderByNameDesc() : List<Product>
+    @Query("SELECT * FROM Product WHERE userId = :userId ORDER BY name DESC")
+    suspend fun searchAllOrderByNameDesc(userId: String) : List<Product>
 
-    @Query("SELECT * FROM Product ORDER BY desc ASC")
-    suspend fun searchAllOrderByDescAsc() : List<Product>
+    @Query("SELECT * FROM Product WHERE userId = :userId ORDER BY desc ASC")
+    suspend fun searchAllOrderByDescAsc(userId: String) : List<Product>
 
-    @Query("SELECT * FROM Product ORDER BY desc DESC")
-    suspend fun searchAllOrderByDescDesc() : List<Product>
+    @Query("SELECT * FROM Product WHERE userId = :userId ORDER BY desc DESC")
+    suspend fun searchAllOrderByDescDesc(userId: String) : List<Product>
 
-    @Query("SELECT * FROM Product ORDER BY value ASC")
-    suspend fun searchAllOrderByValueAsc() : List<Product>
+    @Query("SELECT * FROM Product WHERE userId = :userId ORDER BY value ASC")
+    suspend fun searchAllOrderByValueAsc(userId: String) : List<Product>
 
-    @Query("SELECT * FROM Product ORDER BY value DESC")
-    suspend fun searchAllOrderByValueDesc() : List<Product>
+    @Query("SELECT * FROM Product WHERE userId = :userId ORDER BY value DESC")
+    suspend fun searchAllOrderByValueDesc(userId: String) : List<Product>
 }
