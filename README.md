@@ -6,7 +6,7 @@
 Aplicativo desenvolvido com objetivo de aplicar conhecimentos adquiridos na formação 'Android com Kotlin' da Alura. Possui funcionalidades não exploradas no curso.
 O projeto se trata de um CRUD (CREATE, READ, UPGRADE E DELETE) com banco de dados interno.
 
-# :iphone: Descrição da projeto
+# :iphone: Descrição do projeto
 
 O App lista produtos com imagem, título, descrição e valor. Também, é possível cadastrar produtos. Todo armazenamento é mantido em memória do App, portanto, ao finalizar o App as informações são perdidas.
 
